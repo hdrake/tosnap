@@ -1,0 +1,39 @@
+[project]
+name = "tosnap"
+dynamic = ["version"]
+authors = [
+    {name="Henri F. Drake", email="hfdrake@uci.edu"},
+]
+description = "Water mass transformation analysis of the Atlantic Meridional Overturning Circulation"
+readme = "README.md"
+keywords = [
+    "AMOC",
+    "water mass transformation"
+]
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    # "sectionate @ git+https://github.com/hdrake/sectionate.git@master",
+    # "regionate @ git+https://github.com/hdrake/regionate.git@main",
+    # "xbudget @ git+https://github.com/hdrake/xbudget.git@main",
+    # "xwmt @ git+https://github.com/hdrake/xwmt.git@main",
+    # "xwmb @ git+https://github.com/hdrake/xwmb.git@main",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/hdrake/TOSNAP"
+"Bugs/Issues/Features" = "https://github.com/hdrake/TOSNAP/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+path = "tosnap/version.py"
