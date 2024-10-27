@@ -2,6 +2,10 @@ from sectionate import (
     Section, join_sections
 )
 
+from regionate import (
+    BoundedRegion, GriddedRegions, MaskRegions
+)
+
 atlantic_sections = {
     "Western Europe": Section("Western Europe", [
         ( 009.0, 48.0),
@@ -53,39 +57,41 @@ atlantic_sections = {
     ]),
     "Faroe Bank": Section("Faroe Bank", [
         (-6.25, 62.25),
-        (-8.00, 61.00),
-        (-3.00, 58.50),
+        (-6.25, 61.00),
+        (-5.00, 58.50),
         (-5.00, 56.75),
     ]),
     "OSNAP West": Section("OSNAP West", [
-        (-58, 52),
+        (-58, 52.0),
         (-51, 52.5),
-        (-49, 54),
+        (-49, 54.0),
         (-48, 58.5),
         (-45, 60.5),
         (-44, 64.0),
     ]),
     "OSNAP East": Section("OSNAP East", [
-        (-44, 64.0),
-        (-42, 60.5),
-        (-31, 59.0),
-        (-28., 58.25),
-        (-15, 58.0),
-        (-12.5, 57.5),
-        (-9.5, 57.25),
-        (-5., 56.75)
+        (-44.0, 64.00),
+        (-42.0, 60.50),
+        (-31.0, 59.00),
+        (-28.0, 58.25),
+        (-15.0, 58.00),
+        (-12.5, 57.50),
+        (- 9.5, 57.25),
+        (- 5.0, 56.75)
     ]),
     "English Channel": Section("English Channel", [
-        (0.0, 51.0),
-        (0.0, 49.0),
-        (2.5, 47.5)
+        (-5.0, 56.75),
+        ( 0.0, 51.00),
+        ( 0.0, 49.00),
+        ( 2.5, 49.00),
+        ( 2.5, 47.50)
     ]),
     "NOAC 47N": Section("NOAC 47N", [
-        (-58.0, 52.0),
+        (-58.0, 52.00),
         (-56.5, 48.25),
         (-50.0, 47.00),
-        (-12.0, 47.5),
-        (  2.5, 47.5)
+        (-12.0, 47.50),
+        (  2.5, 47.50)
     ]),
     "Strait of Gibraltar": Section("Strait of Gibraltar", [
         (-4.00, 38.0),
@@ -158,62 +164,83 @@ atlantic_sections = {
     ])
 }
 
-atlantic_region_boundaries = [
-    join_sections(
-        "South Atlantic",
-        atlantic_sections["SAMBA"],
-        atlantic_sections["11S"],
-    ),
-    join_sections(
-        "Tropical Atlantic",
-        atlantic_sections["11S"],
-        atlantic_sections["MOVE 16N"],
-    ),
-    join_sections(
-        "Gulf of Mexico",
-        atlantic_sections["MOVE 16N"],
-        atlantic_sections["Isthmus of Panama"],
-        atlantic_sections["RAPID 26N"]
-    ),
-    join_sections(
-        "Subtropical North Atlantic",
-        atlantic_sections["RAPID 26N"],
-        atlantic_sections["Quebec"],
-        atlantic_sections["NOAC 47N"]
-    ),
-    join_sections(
-        "Subpolar North Atlantic",
-        atlantic_sections["NOAC 47N"],
-        atlantic_sections["OSNAP West"],
-        atlantic_sections["OSNAP East"],
-        atlantic_sections["English Channel"]
-    ),
-    join_sections(
-        "Labrador Sea",
-        atlantic_sections["Davis Strait"],
-        atlantic_sections["OSNAP West"],
-    ),
-    join_sections(
-        "Irminger Sea",
-        atlantic_sections["OSNAP East"],
-        atlantic_sections["Denmark Strait"],
-        atlantic_sections["Faroe Current"],
-        atlantic_sections["Faroe Bank"],
-    ),
-    join_sections(
-        "Greenland Sea",
-        atlantic_sections["Fram Strait"],
-        atlantic_sections["Western Europe"],
-        atlantic_sections["English Channel"],
-        atlantic_sections["Faroe Bank"],
-        atlantic_sections["Faroe Current"],
-        atlantic_sections["Denmark Strait"],
-    ),
-    join_sections(
-        "High Arctic",
-        atlantic_sections["Davis Strait"],
-        atlantic_sections["Fram Strait"],
-        atlantic_sections["Bering Strait"],
-        atlantic_sections["Quebec"]
-    )
-]
+
+
+def grid_atlantic(grid):
+
+    def boundedregion_from_sections(name, *sections, **kwargs):
+        section = join_sections(name, *sections)
+        return BoundedRegion(section, grid, **kwargs)
+
+    atlantic_regions = [
+        boundedregion_from_sections(
+            "South Atlantic",
+            atlantic_sections["SAMBA"],
+            atlantic_sections["11S"],
+        ),
+        boundedregion_from_sections(
+            "Tropical Atlantic",
+            atlantic_sections["11S"],
+            atlantic_sections["MOVE 16N"],
+        ),
+        boundedregion_from_sections(
+            "Gulf of Mexico",
+            atlantic_sections["MOVE 16N"],
+            atlantic_sections["Isthmus of Panama"],
+            atlantic_sections["RAPID 26N"]
+        ),
+        boundedregion_from_sections(
+            "Subtropical North Atlantic",
+            atlantic_sections["RAPID 26N"],
+            atlantic_sections["Quebec"],
+            atlantic_sections["NOAC 47N"]
+        ),
+        boundedregion_from_sections(
+            "Subpolar North Atlantic",
+            atlantic_sections["NOAC 47N"],
+            atlantic_sections["OSNAP West"],
+            atlantic_sections["OSNAP East"],
+            atlantic_sections["English Channel"]
+        ),
+        boundedregion_from_sections(
+            "Labrador Sea",
+            atlantic_sections["Davis Strait"],
+            atlantic_sections["OSNAP West"],
+        ),
+        boundedregion_from_sections(
+            "Irminger Sea",
+            atlantic_sections["OSNAP East"],
+            atlantic_sections["Denmark Strait"],
+            atlantic_sections["Faroe Current"],
+            atlantic_sections["Faroe Bank"],
+        ),
+        boundedregion_from_sections(
+            "Greenland Sea",
+            atlantic_sections["Fram Strait"],
+            atlantic_sections["Western Europe"],
+            atlantic_sections["English Channel"],
+            atlantic_sections["Faroe Bank"],
+            atlantic_sections["Faroe Current"],
+            atlantic_sections["Denmark Strait"],
+        ),
+        boundedregion_from_sections(
+            "High Arctic",
+            atlantic_sections["Davis Strait"],
+            atlantic_sections["Fram Strait"],
+            atlantic_sections["Bering Strait"],
+            atlantic_sections["Quebec"],
+            positive_in=False,
+        ),
+        boundedregion_from_sections(
+            "High Arctic",
+            atlantic_sections["Davis Strait"],
+            atlantic_sections["Fram Strait"],
+            atlantic_sections["Bering Strait"],
+            atlantic_sections["Quebec"],
+            positive_in=False,
+        )
+    ]
+
+    atl_dict = {r.name:r for r in atlantic_regions}
+    
+    return GriddedRegions(atl_dict, grid)
