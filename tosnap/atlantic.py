@@ -243,4 +243,4 @@ def grid_atlantic(grid):
 
     atl_dict = {r.name:r for r in atlantic_regions}
     
-    return GriddedRegions(atl_dict, grid)
+    return GriddedRegions(atl_dict, grid, name="Atlantic")
